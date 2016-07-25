@@ -1,44 +1,54 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Sample FirebaseUI App</title>
+    <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+    <script>
+      var config = {
+        apiKey: "AIzaSyBBBEF-Fp3PY5YNrgIG3VEpFPavxexYHu4",
+        authDomain: "movie1-d86b0.firebaseapp.com",
+        databaseURL: "https://movie1-d86b0.firebaseio.com",
+        storageBucket: "movie1-d86b0.appspot.com",
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" />
+    <script type="text/javascript">
+      // FirebaseUI config.
 
-<head>
-  <title>Dropzone Express.js File upload</title>
+      firebase.auth().onAuthStateChanged(function(user) {
+        console.log(user);
+        if(!user){
+          var uiConfig = {
+            'signInSuccessUrl': '/movie',
+            'signInOptions': [
+              // Leave the lines as is for the providers you want to offer your users.
+              // firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+              // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+              // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+              // firebase.auth.GithubAuthProvider.PROVIDER_ID,
+              firebase.auth.EmailAuthProvider.PROVIDER_ID
+            ],
+            // Terms of service url.
+            'tosUrl': '<your-tos-url>',
+          };
 
-  <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-  <link rel="stylesheet" type="text/css" href="libs/dropzone/downloads/css/dropzone.css">
-  <script type="text/javascript" src="libs/jquery/dist/jquery.min.js"></script>
-
-  <script type="text/javascript" src="libs/dropzone/downloads/dropzone.min.js"></script>
-  <script type="text/javascript" src="js/app.js"></script>
-
-</head>
-
-<body>
-  <h1>Dropzone.js and Express.js File uploader</h1>
-  <hr/>
-  <div id="simpleUpload">
-
-   <!-- http://css-tricks.com/css3-progress-bars/ -->
-    <div class="meter">
-      <span class="roller"></span>
-    </div>
-
-    <div id="dropzone">
-      <form action="/upload" class="dropzone" id="my-dropzone">
-      </form>
-    </div>
-    
-    <!-- Also checkout BS example : http://www.dropzonejs.com/bootstrap.html -->
-
-  </div>
-  <br/>
-  <hr/>
-  <br/>
-  <p class="footer">By <a href="http://thejackalofjavascript.com" target="_blank">The Jackal of Javascript</a>
-    <br/>
-    <a href="http://thejackalofjavascript.com" target="_blank">Tutorial</a>
-  </p>
-
-</body>
-
+          // Initialize the FirebaseUI Widget using Firebase.
+          var ui = new firebaseui.auth.AuthUI(firebase.auth());
+          // The start method will wait until the DOM is loaded.
+          ui.start('#firebaseui-auth-container', uiConfig);
+        }else{
+          location.href="/movie"
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <!-- The surrounding HTML is left untouched by FirebaseUI.
+         Your app may use that space for branding, controls and other customizations.-->
+    <h1>Movie Event</h1>
+    <div id="firebaseui-auth-container"></div>
+  </body>
 </html>

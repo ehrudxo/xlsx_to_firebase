@@ -1,40 +1,39 @@
-var mout = require('mout');
 var Q = require('q');
-var RegistryClient = require('bower-registry-client');
-var cli = require('../util/cli');
-var Tracker = require('../util/analytics').Tracker;
+var PackageRepository = require('../core/PackageRepository');
 var defaultConfig = require('../config');
+var cli = require('../util/cli');
+var createError = require('../util/createError');
 
 function search(logger, name, config) {
     var registryClient;
-    var tracker;
 
-    config = mout.object.deepFillIn(config || {}, defaultConfig);
-    config.cache = config.storage.registry;
+    config = defaultConfig(config);
 
-    registryClient = new RegistryClient(config, logger);
-    tracker = new Tracker(config);
-    tracker.track('search', name);
+    var repository = new PackageRepository(config, logger);
+    var registryClient = repository.getRegistryClient();
 
-    // If no name was specified, list all packages
-    if (!name) {
-        return Q.nfcall(registryClient.list.bind(registryClient));
-    // Otherwise search it
-    } else {
+    if (name) {
         return Q.nfcall(registryClient.search.bind(registryClient), name);
+    } else {
+        // List all packages when in interactive mode + json enabled, and
+        // always when in non-interactive mode
+        if (config.interactive && !config.json) {
+            throw createError('no parameter to bower search', 'EREADOPTIONS');
+        }
+
+        return Q.nfcall(registryClient.list.bind(registryClient));
     }
 }
 
 // -------------------
 
-search.line = function (logger, argv) {
+search.readOptions = function (argv) {
     var options = cli.readOptions(argv);
-    var name = options.argv.remain.slice(1).join(' ');
-    return search(logger, name, options);
-};
+    var terms = options.argv.remain.slice(1);
 
-search.completion = function () {
-    // TODO:
+    var name = terms.join(' ');
+
+    return [name];
 };
 
 module.exports = search;

@@ -1,8 +1,6 @@
-/*jshint multistr:true*/
 'use strict';
 var isRoot = require('is-root');
 var createError = require('./createError');
-var cli = require('./cli');
 
 var renderer;
 
@@ -23,6 +21,7 @@ https://gist.github.com/isaacs/579814\n\n\
 You can however run a command with sudo using --allow-root option';
 
     if (isRoot()) {
+        var cli = require('./cli');
         renderer = cli.getRenderer('', false, config);
         renderer.error(createError('Cannot be run with sudo', 'ESUDO', { details : errorMsg }));
         process.exit(1);

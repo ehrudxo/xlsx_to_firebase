@@ -1,6 +1,6 @@
 {
-  "name": "dropzone-express-fileupload",
-  "subdomain": "dropzone-express-fileupload",
+  "name": "movie",
+  "subdomain": "movie",
   "scripts": {
     "start": "node bin/www"
   },
@@ -23,7 +23,9 @@
     "debug": "~0.7.4",
     "ejs": "~0.8.5",
     "express": "~4.0.0",
+    "firebase": "^3.2.0",
     "morgan": "~1.0.0",
-    "static-favicon": "~1.0.0"
+    "static-favicon": "~1.0.0",
+    "xlsx": "^0.8.0"
   }
 }

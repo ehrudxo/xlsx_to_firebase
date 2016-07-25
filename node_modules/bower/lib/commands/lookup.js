@@ -1,21 +1,19 @@
-var mout = require('mout');
 var Q = require('q');
-var RegistryClient = require('bower-registry-client');
-var cli = require('../util/cli');
+var PackageRepository = require('../core/PackageRepository');
 var defaultConfig = require('../config');
 
 function lookup(logger, name, config) {
-    var registryClient;
+    if (!name) {
+        return new Q(null);
+    }
 
-    config = mout.object.deepFillIn(config || {}, defaultConfig);
-    config.cache = config.storage.registry;
+    config = defaultConfig(config);
 
-    registryClient = new RegistryClient(config, logger);
+    var repository = new PackageRepository(config, logger);
+    var registryClient = repository.getRegistryClient();
 
     return Q.nfcall(registryClient.lookup.bind(registryClient), name)
     .then(function (entry) {
-        // TODO: Handle entry.type.. for now it's only 'alias'
-        //       When we got published packages, this needs to be adjusted
         return !entry ? null : {
             name: name,
             url: entry && entry.url
@@ -25,19 +23,12 @@ function lookup(logger, name, config) {
 
 // -------------------
 
-lookup.line = function (logger, argv) {
-    var options =  cli.readOptions(argv);
+lookup.readOptions = function (argv) {
+    var cli = require('../util/cli');
+    var options = cli.readOptions(argv);
     var name = options.argv.remain[1];
 
-    if (!name) {
-        return new Q();
-    } else {
-        return lookup(logger, name);
-    }
-};
-
-lookup.completion = function () {
-    // TODO:
+    return [name];
 };
 
 module.exports = lookup;

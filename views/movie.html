@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>KaKaoMovie</title>
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="libs/dropzone/downloads/css/dropzone.css">
+    <script type="text/javascript" src="libs/jquery/dist/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id="preview-template" style="display: none;">
+        <div class="dz-preview dz-file-preview">
+            <div class="dz-details">
+                <div class="dz-filename"><span data-dz-name></span></div>
+                <div class="dz-size" data-dz-size></div>
+            </div>
+            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+            <div class="dz-success-mark"><span>✔</span></div>
+            <div class="dz-error-mark"><span>✘</span></div>
+            <div class="dz-error-message"><span data-dz-errormessage></span></div>
+        </div>
+    </div>
+    <h1>Movie Event</h1>
+    <hr/>
+    <div id="simpleUpload">
+        <div class="meter">
+            <span class="roller"></span>
+        </div>
+        <div id="dropzone">
+            <form action="/upload" class="dropzone" id="my-dropzone">
+            </form>
+        </div>
+    </div>
+    <br/>
+    <hr/>
+    <br/>
+    <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+    <script>
+      var config = {
+        apiKey: "AIzaSyBBBEF-Fp3PY5YNrgIG3VEpFPavxexYHu4",
+        authDomain: "movie1-d86b0.firebaseapp.com",
+        databaseURL: "https://movie1-d86b0.firebaseio.com",
+        storageBucket: "movie1-d86b0.appspot.com",
+      };
+      firebase.initializeApp(config);
+    </script>
+    <script type="text/javascript" src="libs/dropzone/downloads/dropzone.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+</body>
+
+</html>

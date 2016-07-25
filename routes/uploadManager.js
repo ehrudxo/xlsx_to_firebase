@@ -8,17 +8,22 @@ var options = {
 };
 
 var uploader = require('blueimp-file-upload-expressjs')(options);
-
+var jsonManager = require('./jsonManager');
 module.exports = function(router) {
   router.get('/upload', function(req, res) {
     uploader.get(req, res, function(obj) {
-      res.send(JSON.stringify(obj));
+        res.send(JSON.stringify(obj));
     });
   });
-
+// Code Meister Keen '-'
   router.post('/upload', function(req, res) {
     uploader.post(req, res, function(obj) {
-      res.send(JSON.stringify(obj));
+      jsonManager.save(obj, function(err,obj){
+        if(!err)
+          res.send(JSON.stringify(obj));
+        else
+          res.send("error가 발생했습니다.");
+      });
     });
   });
 
