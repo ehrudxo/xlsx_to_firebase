@@ -2,7 +2,7 @@ var databaseURL= "https://movie1-d86b0.firebaseio.com"
 Dropzone.options.myDropzone = {
     init: function() {
         var self = this;
-        // config
+        // config 
         self.options.addRemoveLinks = true;
         self.options.dictRemoveFile = "삭제";
 

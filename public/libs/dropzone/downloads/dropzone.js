@@ -434,11 +434,18 @@ require.register("dropzone/lib/dropzone.js", function (exports, module) {
             node.innerHTML = this.filesize(file.size);
           }
           if (this.options.addRemoveLinks) {
-            file._openLink = Dropzone.createElement("<a class=\"dz-remove\" href=\"javascript:undefined;\">JSON</a>");
+            file._urlPopover = Dropzone.createElement("<a class=\"dz-remove\"  id=\""+file.url+"\" href=\"javascript:undefined;\">URL</a>");
+            console.log(file);
+            file._urlPopover.addEventListener("click", function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              $(this).webuiPopover({title:'Link',content:file.url});
+            });
+            file.previewElement.appendChild(file._urlPopover);
+            file._openLink = Dropzone.createElement("<a class=\"dz-remove\"  href=\"javascript:undefined;\">JSON</a>");
             file._openLink.addEventListener("click", function(e) {
               e.preventDefault();
               e.stopPropagation();
-              console.log(file);
               window.open(file.url);
             });
             file.previewElement.appendChild(file._openLink);
